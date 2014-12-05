@@ -1,0 +1,15 @@
+phparch.weather:
+  path: '/phparch/weather'
+  defaults:
+    _form: '\Drupal\phparch\Form\ZipcodeForm'
+    _title: 'Enter your zipcode'
+  requirements:
+    _permission: 'access content'
+
+phparch.zip:
+  path: '/phparch/zip'
+  defaults:
+    _content: '\Drupal\phparch\Controller\WeatherController::zip'
+    _title: 'Weather for your zipcode'
+  requirements:
+    _permission: 'access content'

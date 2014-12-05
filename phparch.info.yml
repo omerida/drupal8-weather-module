@@ -1,0 +1,9 @@
+name: PHPArch Module
+description: Example Module for Drupal 8
+package: phparch
+type: module
+version: 1.0
+core: 8.x
+# dependencies:
+#  - node
+# configure: example.admin_index
