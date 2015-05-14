@@ -9,7 +9,7 @@ phparch.weather:
 phparch.zip:
   path: '/phparch/zip'
   defaults:
-    _content: '\Drupal\phparch\Controller\WeatherController::zip'
+    _controller: '\Drupal\phparch\Controller\WeatherController::zip'
     _title: 'Weather for your zipcode'
   requirements:
     _permission: 'access content'
