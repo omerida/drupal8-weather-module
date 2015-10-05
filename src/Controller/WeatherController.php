@@ -29,9 +29,9 @@ class WeatherController extends ControllerBase {
             // use our theme function to render twig template
             $element = array(
                 '#theme' => 'phparch_current_weather',
-                '#location' => $weather['name'],
-                '#temperature' => $weather['main']['temp'],
-                '#description' => $weather['weather'][0]['description'],
+                '#location' => $weather->name,
+                '#temperature' => $weather->main->temp,
+                '#description' => $weather->weather[0]->description,
                 '#zipcode' => $zipcode,
             );
 
@@ -59,7 +59,7 @@ class WeatherController extends ControllerBase {
         );
 
         if (200 == $request->getStatusCode()) {
-            return $request->json();
+            return json_decode($request->getBody());
         }
     }
 }
