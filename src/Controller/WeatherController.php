@@ -27,8 +27,7 @@ class WeatherController extends ControllerBase {
         // get weather;
         try {
             $weatherService = \Drupal::service('phparch.weather');
-            echo '<pre>'; print_r($weatherService); echo '</pre>';
-            die('oam 33');
+
             //$weatherService->setApiKey(self::API_KEY);
             $weather = $weatherService->fetchByZipCode($zipcode);
 
