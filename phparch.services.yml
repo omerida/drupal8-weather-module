@@ -1,0 +1,4 @@
+services:
+  phparch.weather:
+    class: Drupal\phparch\Service\WeatherService
+    arguments: ['@http_client', 'YOUR KEY HERE']
