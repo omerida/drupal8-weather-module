@@ -14,6 +14,8 @@ use GuzzleHttp\Client;
  */
 class WeatherController extends ControllerBase {
 
+    const API_KEY = '1234';
+
     public function zip() {
 
         // check $_GET for a zip code
@@ -25,7 +27,8 @@ class WeatherController extends ControllerBase {
         $zipcode = filter_var($_GET['zipcode'], FILTER_SANITIZE_STRING);
 
         // get weather;
-        if ($weather = $this->fetchWeather($zipcode)) {
+        try {
+            $weather = $this->fetchWeather($zipcode);
             // use our theme function to render twig template
             $element = array(
                 '#theme' => 'phparch_current_weather',
@@ -36,7 +39,7 @@ class WeatherController extends ControllerBase {
             );
 
             return $element;
-        } else {
+        } catch (\Exception $e) {
             drupal_set_message(t('Could not fetch weather, please try again later.'), 'error');
             return $this->redirect('phparch.weather');
         }
@@ -51,6 +54,7 @@ class WeatherController extends ControllerBase {
             'http://api.openweathermap.org/data/2.5/weather',
             [
                 'query' => [
+                    'appid' => self::API_KEY,
                     'q' => $zipcode . ',USA',
                     'units' => 'imperial',
                     'cnt' => 7
