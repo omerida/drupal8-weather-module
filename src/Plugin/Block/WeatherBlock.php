@@ -13,13 +13,24 @@ use Drupal\Core\Block\BlockBase;
  * )
  */
 class WeatherBlock extends BlockBase {
-  /**
-   * {@inheritdoc}
-   */
-  public function build() {
-   return array(
-      '#type' => 'markup',
-      '#markup' => 'This block lists the weather.',
-    );
-  }
+    /**
+     * {@inheritdoc}
+     */
+    public function build() {
+        $weatherService = \Drupal::service('phparch.weather');
+
+        $zip = 22030;
+        $weather = $weatherService->fetchByZipCode($zip);
+
+        // use our theme function to render twig template
+        $element = array(
+            '#theme' => 'phparch_current_weather',
+            '#location' => $weather->name,
+            '#temperature' => $weather->main->temp,
+            '#description' => $weather->weather[0]->description,
+            '#zipcode' => $zip,
+        );
+
+        return $element;
+    }
 }
