@@ -1,6 +1,7 @@
 <?php
 /* DRUPAL HOOKS */
 
+
 /**
  * Implements hook_theme().
  */
@@ -16,4 +17,31 @@ function phparch_theme($existing, $type, $theme, $path) {
             'template' => 'phpa-current-weather',
         ),
     );
+}
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * implements hook_form_alter()
+ */
+function phparch_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+    // check $form_id, alter the $form
+}
+
+/**
+ * implements hook_form_BASE_ID_alter()
+ */
+
+function phparch_form_search_form_alter(
+    array &$form, FormStateInterface $form_state, $form_id
+) {
+    $form['#title'] = \Drupal::translation()->translate('Search Terms');
+    $form['#validate'][] = function(array &$form, FormStateInterface $form_state) {
+        if (strlen($form_state->getValue('keys')) < 3) {
+        $form_state->setErrorByName(
+            'keys',
+            t('Please enter at least 3 characters for searching.'));
+        }
+    };
+
 }

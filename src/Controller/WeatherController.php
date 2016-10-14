@@ -28,7 +28,6 @@ class WeatherController extends ControllerBase {
         try {
             $weatherService = \Drupal::service('phparch.weather');
 
-            //$weatherService->setApiKey(self::API_KEY);
             $weather = $weatherService->fetchByZipCode($zipcode);
 
             // use our theme function to render twig template
