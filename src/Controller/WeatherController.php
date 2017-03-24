@@ -8,12 +8,21 @@ namespace Drupal\phparch\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use GuzzleHttp\Client;
+use Drupal\phparch\Service\WeatherService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides route responses for the phparch  module.
  */
 class WeatherController extends ControllerBase {
 
+    protected $weatherService;
+
+    public function __construct(WeatherService $ws) {
+        $this->weatherService = $ws;
+        $config = $this->config('phparch.settings');
+        $this->weatherService->setApiKey($config->get('api_key'));
+    }
     public function zip() {
 
         // check $_GET for a zip code
@@ -26,12 +35,7 @@ class WeatherController extends ControllerBase {
 
         // get weather;
         try {
-            /** @var \Drupal\phparch\Service\WeatherService $weatherService */
-            $weatherService = \Drupal::service('phparch.weather');
-
-            $config = $this->config('phparch.settings');
-            $weatherService->setApiKey($config->get('api_key'));
-            $weather = $weatherService->fetchByZipCode($zipcode);
+            $weather = $this->weatherService->fetchByZipCode($zipcode);
 
             // use our theme function to render twig template
             $element = array(
@@ -47,5 +51,11 @@ class WeatherController extends ControllerBase {
             drupal_set_message(t('Could not fetch weather, please try again later:' . $e->getMessage()), 'error');
             return $this->redirect('phparch.weather');
         }
+    }
+
+    public static function create(ContainerInterface $container) {
+        return new static(
+            $container->get('phparch.weather')
+        );
     }
 }
