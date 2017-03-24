@@ -22,6 +22,9 @@ class WeatherBlock extends BlockBase {
     public function build() {
         $weatherService = \Drupal::service('phparch.weather');
 
+        $config = \Drupal::config('phparch.settings');
+        $weatherService->setApiKey($config->get('api_key'));
+
         // array dereferencing
         $zipcode = $this->getConfiguration()['zipcode'];
         if (!empty($zipcode)) {
