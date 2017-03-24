@@ -1,0 +1,6 @@
+phparch.admin:
+  title: 'Weather settings'
+  description: 'Example settings for phparch weather module'
+  parent: system.admin_config_development
+  route_name: phparch.settings
+  weight: 100

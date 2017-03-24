@@ -38,7 +38,7 @@ class WeatherController extends ControllerBase {
                 '#description' => $weather->weather[0]->description,
                 '#zipcode' => $zipcode,
             );
-
+            $element['#cache']['max-age'] = 0;
             return $element;
         } catch (\Exception $e) {
             drupal_set_message(t('Could not fetch weather, please try again later:' . $e->getMessage()), 'error');
