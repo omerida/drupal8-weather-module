@@ -14,8 +14,6 @@ use GuzzleHttp\Client;
  */
 class WeatherController extends ControllerBase {
 
-    const API_KEY = '1234';
-
     public function zip() {
 
         // check $_GET for a zip code
@@ -37,7 +35,7 @@ class WeatherController extends ControllerBase {
                 '#description' => $weather->weather[0]->description,
                 '#zipcode' => $zipcode,
             );
-
+            $element['#cache']['max-age'] = 0;
             return $element;
         } catch (\Exception $e) {
             drupal_set_message(t('Could not fetch weather, please try again later.'), 'error');
@@ -49,12 +47,14 @@ class WeatherController extends ControllerBase {
         // get data via http://openweathermap.org/api
         $client = new Client();
 
+        $config = $this->config('phparch.settings');
+        
         /* @var \GuzzleHttp\Message\Response $result */
         $request = $client->get(
             'http://api.openweathermap.org/data/2.5/weather',
             [
                 'query' => [
-                    'appid' => self::API_KEY,
+                    'appid' => $config->get('api_key'),
                     'q' => $zipcode . ',USA',
                     'units' => 'imperial',
                     'cnt' => 7
