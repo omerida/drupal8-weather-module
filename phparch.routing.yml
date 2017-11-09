@@ -13,3 +13,11 @@ phparch.zip:
     _title: 'Weather for your zipcode'
   requirements:
     _permission: 'access content'
+
+phparch.settings:
+  path: '/admin/structure/phparch/settings'
+  defaults:
+    _form: '\Drupal\phparch\Form\SettingsForm'
+    _title: 'Weather Module'
+  requirements:
+    _permission: 'administer site configuration'

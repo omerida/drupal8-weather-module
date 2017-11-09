@@ -26,21 +26,23 @@ class WeatherController extends ControllerBase {
 
         // get weather;
         try {
+            /** @var \Drupal\phparch\Service\WeatherService $weatherService */
             $weatherService = \Drupal::service('phparch.weather');
 
+            $config = $this->config('phparch.settings');
+            $weatherService->setApiKey($config->get('api_key'));
             $weather = $weatherService->fetchByZipCode($zipcode);
 
-            if (!empty($weather)) {
-                // use our theme function to render twig template
-                $element = array(
-                    '#theme' => 'phparch_current_weather',
-                    '#location' => $weather->name,
-                    '#temperature' => $weather->main->temp,
-                    '#description' => $weather->weather[0]->description,
-                    '#zipcode' => $zipcode,
-                );
-                return $element;
-            }
+            // use our theme function to render twig template
+            $element = array(
+                '#theme' => 'phparch_current_weather',
+                '#location' => $weather->name,
+                '#temperature' => $weather->main->temp,
+                '#description' => $weather->weather[0]->description,
+                '#zipcode' => $zipcode,
+            );
+            $element['#cache']['max-age'] = 0;
+            return $element;
         } catch (\Exception $e) {
             drupal_set_message(t('Could not fetch weather, please try again later:' . $e->getMessage()), 'error');
             return $this->redirect('phparch.weather');
