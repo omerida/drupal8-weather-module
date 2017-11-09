@@ -38,9 +38,7 @@ class WeatherService {
             [
                 'query' => [
                     'appid' => $this->api_key,
-                    'q' => $zipcode . ',USA',
-                    'units' => 'imperial',
-                    'cnt' => 7
+                    'zip' => $zipcode,
                 ]
             ]
         );
