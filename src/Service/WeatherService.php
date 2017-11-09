@@ -33,20 +33,23 @@ class WeatherService {
     public function fetchByZipCode($zipcode) {
         // get data via http://openweathermap.org/api
         /* @var \GuzzleHttp\Message\Response $result */
-        $request = $this->client->get(
-            'http://api.openweathermap.org/data/2.5/weather',
-            [
-                'query' => [
-                    'appid' => $this->api_key,
-                    'q' => $zipcode . ',USA',
-                    'units' => 'imperial',
-                    'cnt' => 7
+        try {
+            $request = $this->client->get(
+                'http://api.openweathermap.org/data/2.5/weather',
+                [
+                    'query' => [
+                        'appid' => $this->api_key,
+                        'zip' => $zipcode,
+                    ]
                 ]
-            ]
-        );
+            );
 
-        if (200 == $request->getStatusCode()) {
-            return json_decode($request->getBody());
+            if (200 == $request->getStatusCode()) {
+                return json_decode($request->getBody());
+            }
+        }
+        catch (\Exception $ex) {
+            // do something
         }
     }
 

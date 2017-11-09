@@ -25,18 +25,25 @@ class WeatherBlock extends BlockBase {
         // array dereferencing
         $zipcode = $this->getConfiguration()['zipcode'];
         if (!empty($zipcode)) {
-            $weather = $weatherService->fetchByZipCode($zipcode);
+            try {
+                $weather = $weatherService->fetchByZipCode($zipcode);
 
-            // use our theme function to render twig template
-            $element = array(
-                '#theme' => 'phparch_current_weather',
-                '#location' => $weather->name,
-                '#temperature' => $weather->main->temp,
-                '#description' => $weather->weather[0]->description,
-                '#zipcode' => $zipcode,
-            );
+                // use our theme function to render twig template
+                $element = array(
+                    '#theme' => 'phparch_current_weather',
+                    '#location' => $weather->name,
+                    '#temperature' => $weather->main->temp,
+                    '#description' => $weather->weather[0]->description,
+                    '#zipcode' => $zipcode,
+                    '#cache' => [
+                        'max-age' => 60, // cache for one minute
+                    ]
+                );
 
-            return $element;
+                return $element;
+            } catch (\Exception $ex) {
+
+            }
         }
     }
 
